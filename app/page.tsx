@@ -10,25 +10,54 @@ const socialLinks = [
   { name: "GitHub", url: "https://github.com/Mani2453", icon: Github },
   { name: "LinkedIn", url: "https://www.linkedin.com/in/mani-freelance-developer-980289381/", icon: Linkedin },
 ];
+// Allowed color keys for projects
+type ProjectColor = 'purple' | 'blue' | 'green' | 'pink';
+
 // Project data array
-const projects = [
+interface Project {
+  title: string;
+  description: string;
+  image: string;
+  color: ProjectColor;
+  live: string;
+  github: string;
+}
+
+const projects: Project[] = [
   {
-    title: "Next.js Blog",
-    description: "A modern blog platform built with Next.js and Tailwind CSS.",
+    title: "Task Management App",
+    description:
+      "A modern, full-stack web application for organizing work efficiently. Features secure authentication (JWT), project and task management, real-time feedback, and a clean, responsive dashboard. Built with Next.js, MongoDB, and Tailwind CSS. All data is private to each user.",
     image: "/next.svg",
     color: "purple",
-    live: "#",
-    github: "#"
-  },
-  {
-    title: "Node.js API",
-    description: "A RESTful API built with Node.js, Express.js, and MongoDB.",
-    image: "/window.svg",
-    color: "blue",
-    live: "#",
-    github: "#"
+    live: "https://task-management-seven-pearl.vercel.app/",
+    github: "https://github.com/Mani2453/task-management"
   }
 ];
+
+// Map color names to Tailwind border/text/bg classes
+const colorClassMap: Record<ProjectColor, { border: string; text: string; hoverBg: string }> = {
+  purple: {
+    border: "border-purple-100",
+    text: "text-purple-700",
+    hoverBg: "hover:bg-purple-50"
+  },
+  blue: {
+    border: "border-blue-100",
+    text: "text-blue-700",
+    hoverBg: "hover:bg-blue-50"
+  },
+  green: {
+    border: "border-green-100",
+    text: "text-green-700",
+    hoverBg: "hover:bg-green-50"
+  },
+  pink: {
+    border: "border-pink-100",
+    text: "text-pink-700",
+    hoverBg: "hover:bg-pink-50"
+  },
+};
 export default function Portfolio() {
   const [showTopBtn, setShowTopBtn] = useState(false);
 
@@ -154,26 +183,29 @@ export default function Portfolio() {
   <section id="projects" className="py-20 bg-white text-center px-6 animate-fade-in-up relative mb-8">
         <h2 className="text-4xl font-bold mb-8">Projects</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {projects.map((project) => (
-            <Card
-              key={project.title}
-              className={`hover:shadow-2xl transition-shadow group bg-white/80 backdrop-blur border border-${project.color}-100`}
-            >
-              <CardContent className="p-6 rounded-2xl">
-                <img src={project.image} alt={project.title} className="w-16 h-16 mx-auto mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className={`text-2xl font-semibold mb-2 text-${project.color}-700`}>{project.title}</h3>
-                <p className="mb-4 text-gray-700">{project.description}</p>
-                <div className="flex justify-center gap-4">
-                  <Button asChild variant="outline" className={`hover:bg-${project.color}-50`}>
-                    <a href={project.live} target="_blank" rel="noopener noreferrer">Live Demo</a>
-                  </Button>
-                  <Button asChild variant="outline" className={`hover:bg-${project.color}-50`}>
-                    <a href={project.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          {projects.map((project) => {
+            const colorClasses = colorClassMap[project.color];
+            return (
+              <Card
+                key={project.title}
+                className={`hover:shadow-2xl transition-shadow group bg-white/80 backdrop-blur border ${colorClasses.border}`}
+              >
+                <CardContent className="p-6 rounded-2xl">
+                  <img src={project.image} alt={project.title} className="w-16 h-16 mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                  <h3 className={`text-2xl font-semibold mb-2 ${colorClasses.text} group-hover:text-primary transition-colors duration-300`}>{project.title}</h3>
+                  <p className="mb-4 text-gray-700">{project.description}</p>
+                  <div className="flex justify-center gap-4">
+                    <Button asChild variant="outline" className={colorClasses.hoverBg}>
+                      <a href={project.live} target="_blank" rel="noopener noreferrer">Live Demo</a>
+                    </Button>
+                    <Button asChild variant="outline" className={colorClasses.hoverBg}>
+                      <a href={project.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
         {/* Decorative wave */}
         <svg className="absolute -bottom-16 left-0 w-full" height="60" viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="#f3f4f6" d="M0,32L48,37.3C96,43,192,53,288,58.7C384,64,480,64,576,58.7C672,53,768,43,864,37.3C960,32,1056,32,1152,37.3C1248,43,1344,53,1392,58.7L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
